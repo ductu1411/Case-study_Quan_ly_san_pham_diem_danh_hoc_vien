@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body onload = "attendance.showAttendance()">
+<h2>Add new student</h2>
+<input placeholder="New student" type = "text" id = "inputStudent">
+<button onclick = "attendance.add()">Add</button>
+<h2>Display All Student</h2>
+<div id = "amount"></div>
+<table cellspacing="0" cellpadding="15" style="width: 100%">
+    <tr>
+        <th>Name</th>
+        <th>Lớp</th>
+        <th>Nghỉ</th>
+        <th>Đi học</th>
+        <th>Số ngày<br>nghỉ</th>
+        <th>Số ngày<br>có mặt</th>
+        <th>Chỉnh sửa</th>
+        <th>Xóa</th>
+    </tr>
+</table>
+<table cellspacing="0" cellpadding="15" id = "display" style="width: 100%"></table>
+<button onclick = "attendance.submit()" style="width: 100%">Submit</button>
+<script>
+
+let Attendance = function(listStudent){
+    this.listStudent = listStudent;
+    this.data = '';
+    let notCome = new Array(this.listStudent.length);
+    for (x = 0; x < notCome.length; x++){
+        notCome[x] = 0;
+    }
+    let come = new Array(this.listStudent.length);
+    for (x = 0; x <  come.length; x++){
+        come[x] = 0;
+    }
+    this.showAttendance = function () {
+
+        let amount = " " + this.listStudent.length + " Student";
+        document.getElementById("amount").innerHTML = amount;
+        for(let i = 0; i < this.listStudent.length; i++){
+            this.data += "<tr>";
+            this.data += "<td style='width: 12.5%'>"+ this.listStudent[i] +"</td>";
+            this.data += "<td style='width: 12.5%'>C0719G1</td>";
+            this.data += "<td style='width: 12.5%'><input type='radio' name = "+ i +"></td>";
+            this.data += "<td style='width: 12.5%'><input type='radio' name = "+ i +" checked></td>";
+            this.data += "<td style='width: 12.5%'>" + notCome[i] + "</td>";
+            this.data += "<td style='width: 10.5%'>" + come[i] + "</td>";
+            this.data += "<td style='text-align: center'><button onclick= 'attendance.editStudent("+ i +")'>Edit</button></td>";
+            this.data += "<td style='text-align: center'><button onclick= 'attendance.deleteStudent("+ i +")'>Delete</button></td>";
+            this.data += "</tr>"
+        }
+        document.getElementById("display").innerHTML =  this.data;
+    };
+
+    this.add = function(){
+        let inputStudent = document.getElementById("inputStudent").value;
+        this.listStudent.push(inputStudent);
+        notCome.push(0);
+        come.push(0);
+        this.data = '';
+        this.showAttendance();
+    };
+
+    this.deleteStudent = function(num){
+        this.listStudent.splice(num, 1);
+        this.data = '';
+        this.showAttendance();
+    };
+
+    this.editStudent = function(num){
+        let editStudent = prompt();
+        this.listStudent.splice(num, 1, editStudent);
+        this.data = '';
+        this.showAttendance();
+    };
+
+    this.submit = function(){
+        for (n =0; n < this.listStudent.length; n++) {
+            let checkbox = document.getElementsByName(n);
+            if (checkbox[0].checked === true){
+                notCome[n] += 1;
+            } else if (checkbox[1].checked === true){
+                come[n] += 1;
+            }
+        }
+        this.data = '';
+        this.showAttendance();
+    };
+}
+let listStudent = ["Nguyễn Đức Tú", "Nguyễn Bá Quỳnh", "Lê Ngọc Huyền",
+    "Nguyễn Ngọc Đại", "Trần Như Hải", "Trần Xuân Hùng", "Hồ Xuân Hoàng Dương",
+"Vũ Văn Vương", "Nguyễn Kim Nghĩa", "Nguyễn Như Công", "Nguyễn Hữu Phi", "Nguyễn Anh Thuận",
+"Nguyễn Ngọc Diệu", "Nguyễn Hoàng Nam", "Từ Văn Phong", "Lê Thanh Tùng", "Nguyễn Minh Đắc"];
+let attendance = new Attendance(listStudent);
+
+</script>
+</body>
+</html>
